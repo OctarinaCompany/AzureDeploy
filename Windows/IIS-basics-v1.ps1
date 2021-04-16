@@ -1,6 +1,6 @@
 Set-ExecutionPolicy Bypass -Scope Process
 
-#IIS
+# IIS
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-ManagementConsole
@@ -16,17 +16,17 @@ Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebSockets
 # Configure IIS with powershell
 Import-Module WebAdministration 
 
-#Installers
+# Installers
 
 Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
 
 choco install webpicmd -y
 
-#Url Rewrite
+# Url Rewrite
 
 choco install urlrewrite -y
 
-#Redirection 80->443
+# Redirection 80->443
 
 $RuleName = 'http to https'
 $Inbound = '(.*)'
@@ -41,7 +41,7 @@ Set-WebConfigurationProperty -PSPath $Site -filter "$Filter/conditions" -name '.
 Set-WebConfigurationProperty -PSPath $Site -filter "$Filter/action" -name 'type' -value 'Redirect'
 Set-WebConfigurationProperty -PSPath $Site -filter "$Filter/action" -name 'url' -value $Outbound
 
-#Web Deploy
+# Web Deploy
 
 choco install webdeploy -y
 WebpiCmd.exe /Install /AcceptEULA /SuppressReboot /Products:WDeploy_2_1
@@ -52,3 +52,8 @@ WebpiCmd.exe /Install /AcceptEULA /SuppressReboot /Products:WDeploy36PS
 choco uninstall webdeploy -y
 choco install webdeploy -y
 New-NetFirewallRule -DisplayName 'WebDeploy 8172' -Profile 'Private' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8172
+
+# Restart IIS
+net stop was /y
+
+net start w3svc
