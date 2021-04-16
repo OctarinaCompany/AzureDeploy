@@ -54,6 +54,6 @@ choco install webdeploy -y
 New-NetFirewallRule -DisplayName 'WebDeploy 8172' -Profile 'Private' -Direction Inbound -Action Allow -Protocol TCP -LocalPort 8172
 
 # Restart IIS
-net stop was /y
 
+net stop was /y
 net start w3svc
