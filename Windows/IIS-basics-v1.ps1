@@ -24,7 +24,7 @@ choco install webpicmd -y
 
 #Url Rewrite
 
-choco install urlrewrite --version=2.0.2
+choco install urlrewrite -y
 
 #Redirection 80->443
 
