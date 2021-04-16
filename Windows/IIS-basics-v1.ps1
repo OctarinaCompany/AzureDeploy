@@ -57,3 +57,5 @@ New-NetFirewallRule -DisplayName 'WebDeploy 8172' -Profile 'Private' -Direction 
 
 net stop was /y
 net start w3svc
+
+Set-TimeZone -Id "W. Europe Standard Time" -PassThru # optional
