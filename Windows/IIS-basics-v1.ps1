@@ -1,3 +1,5 @@
+Set-ExecutionPolicy Bypass -Scope Process
+
 #IIS
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServerRole
 Enable-WindowsOptionalFeature -Online -FeatureName IIS-WebServer
