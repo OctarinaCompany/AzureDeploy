@@ -20,6 +20,25 @@ Invoke-Expression ((New-Object System.Net.WebClient).DownloadString('https://cho
 
 choco install webpicmd -y
 
+#Url Rewrite
+
+choco install urlrewrite --version=2.0.2
+
+#Redirection 80->443
+
+$RuleName = 'http to https'
+$Inbound = '(.*)'
+$Outbound = 'https://{HTTP_HOST}{REQUEST_URI}'
+$Site = 'IIS:\Sites\Default Web Site'
+$Root = 'system.webServer/rewrite/rules'
+$Filter = "{0}/rule[@name='{1}']" -f $Root, $RuleName
+
+Add-WebConfigurationProperty -PSPath $Site -filter $Root -name '.' -value @{name=$RuleName; patterSyntax='Regular Expressions'; stopProcessing='True'}
+Set-WebConfigurationProperty -PSPath $Site -filter "$Filter/match" -name 'url' -value $Inbound
+Set-WebConfigurationProperty -PSPath $Site -filter "$Filter/conditions" -name '.' -value @{input='{HTTPS}'; matchType='0'; pattern='^OFF$'; ignoreCase='True'; negate='False'}
+Set-WebConfigurationProperty -PSPath $Site -filter "$Filter/action" -name 'type' -value 'Redirect'
+Set-WebConfigurationProperty -PSPath $Site -filter "$Filter/action" -name 'url' -value $Outbound
+
 #Web Deploy
 
 choco install webdeploy -y
